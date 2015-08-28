@@ -1,0 +1,14 @@
+{
+  "name": "itemset-generator-react",
+  "version": "0.0.1",
+  "description": "league of legends item set generator",
+  "author": "Shelley Wang",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+  }
+}
