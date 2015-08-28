@@ -45,10 +45,12 @@ var ItemList = React.createClass({
     var objectKeys = Object.keys(this.props.data);
     var items = objectKeys.map(function (keyVal) {
       var singleItem = newData[keyVal];
-      return (
-        <SingleItem key={keyVal} name={singleItem.name} mainStat={singleItem.group} handleClick={list.clickHandler} >
-        </SingleItem>
-      );
+      if (!singleItem['maps'] || singleItem['maps']['1'] === undefined || singleItem['maps']['1']) {
+        return (
+          <SingleItem key={keyVal} img={singleItem['image']['full']} name={singleItem.name} mainStat={singleItem.group} handleClick={list.clickHandler} >
+          </SingleItem>
+       );
+      }
     });
     return (
       <div id="allItems" >
@@ -64,6 +66,7 @@ var SingleItem = React.createClass({
   },
   render: function() {
     var singleItem = {name: this.props.name,
+                      image: {'full': this.props.img},
                       mainstat: this.props.mainStat};
     if (this.props.mainStat) {
       var stat = <h4 key={this.props.name + 'stat'}>{this.props.mainStat}</h4>
@@ -72,10 +75,11 @@ var SingleItem = React.createClass({
     }
 
     return (
-      <div class="item" onClick={this.clickHandler.bind(null,singleItem)}>
-        <h3 key={this.props.name + 'name'}>{this.props.name}</h3>
+      <span class="item" onClick={this.clickHandler.bind(null,singleItem)}>
+        <img key={this.props.name + 'name'} src={'http://ddragon.leagueoflegends.com/cdn/5.16.1/img/item/'+this.props.img}>
+        </img>
 
-      </div>
+      </span>
     ); //removed         {stat}
   }
 });
