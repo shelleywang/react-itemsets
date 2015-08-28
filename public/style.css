@@ -1,0 +1,21 @@
+body {
+  width: 100%;
+  padding: 10px;
+}
+
+#mainView {
+  width: 100%;
+}
+
+#allitems {
+  color: blue;
+  width: 40%;
+}
+
+#itemSet {
+  position: absolute;
+  color: red;
+  width: 400px;
+  top: 0;
+  right: 0;
+}

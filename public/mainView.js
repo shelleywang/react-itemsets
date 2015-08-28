@@ -1,6 +1,6 @@
 var MainView = React.createClass({
   getInitialState: function() {
-    return {data: []};
+    return {data: [], itemSet:[]};
   },
   getItemsFromServer: function() {
     $.ajax({
@@ -18,17 +18,27 @@ var MainView = React.createClass({
   componentDidMount: function() {
     this.getItemsFromServer();
   },
+  updateItemSet: function(newItem) {
+    var newItems = this.state.itemSet[1] = newItem;
+    this.setState({itemSet: newItems});
+    console.log(newItems)
+  },
   render: function() {
     return (
       <div id='mainView'>
-        <AllItems data={this.state.data}/>
-        <CurrentItemSet />
+        <ItemList data={this.state.data} clickToAdd='true' onAddItem={this.updateItemSet}/>
+        <CurrentItemSet data={this.state.itemSet} clickToAdd='false'/>
       </div>
     );
   }
 });
 
-var AllItems = React.createClass({
+var ItemList = React.createClass({
+  clickHandler: function() {
+    if (this.props.clickToAdd) {
+      this.props.onAddItem({name:'hello', group:'shelley'});
+    }
+  },
   render: function() {
     var newData = this.props.data;
     var objectKeys = Object.keys(this.props.data);
@@ -40,7 +50,7 @@ var AllItems = React.createClass({
       );
     });
     return (
-      <div id="allItems" >
+      <div id="allItems" onClick={this.clickHandler}>
         {items}
       </div>
     );
@@ -59,10 +69,18 @@ var SingleItem = React.createClass({
 });
 
 var CurrentItemSet = React.createClass({
+  getInitialState: function() {
+    return {data: this.props.data};
+  },
+  updateItems: function(newItem){
+    var allItems = this.state.data.concat([newItem]);
+    this.setState({data: allItems});
+  },
   render: function() {
     return (
       <div id="itemSet">
       <h4>Build an item set</h4>
+      <ItemList data={this.state.data}/>
       </div>
     );
   }
