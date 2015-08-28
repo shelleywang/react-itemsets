@@ -8,7 +8,7 @@ var MainView = React.createClass({
       dataType: 'json',
       cache: false,
       success: function(data) {
-        this.setState({data: data});
+        this.setState({data: data.data});
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -30,9 +30,12 @@ var MainView = React.createClass({
 
 var AllItems = React.createClass({
   render: function() {
-    var items = this.props.data.map(function (singleItem) {
+    var newData = this.props.data;
+    var objectKeys = Object.keys(this.props.data);
+    var items = objectKeys.map(function (keyVal) {
+      var singleItem = newData[keyVal];
       return (
-        <SingleItem key={singleItem.name} name={singleItem.name} mainStat={singleItem.mainStat}>
+        <SingleItem key={singleItem.name} name={singleItem.name} mainStat={singleItem.group}>
         </SingleItem>
       );
     });
