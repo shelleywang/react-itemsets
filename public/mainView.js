@@ -1,6 +1,6 @@
 var MainView = React.createClass({
   getInitialState: function() {
-    return {data: [], itemSet:[]};
+    return {data: [], itemSet: []};
   },
   getItemsFromServer: function() {
     $.ajax({
@@ -19,9 +19,9 @@ var MainView = React.createClass({
     this.getItemsFromServer();
   },
   updateItemSet: function(newItem) {
-    var newItems = this.state.itemSet[1] = newItem;
-    this.setState({itemSet: newItems});
-    console.log(newItems)
+    // var newItems = this.state.itemSet.push(newItem);
+    this.state.itemSet.push(newItem);
+    this.setState({itemSet: this.state.itemSet});
   },
   render: function() {
     return (
@@ -34,23 +34,24 @@ var MainView = React.createClass({
 });
 
 var ItemList = React.createClass({
-  clickHandler: function() {
+  clickHandler: function(item) {
     if (this.props.clickToAdd) {
-      this.props.onAddItem({name:'hello', group:'shelley'});
+      this.props.onAddItem(item);
     }
   },
   render: function() {
+    var list = this;
     var newData = this.props.data;
     var objectKeys = Object.keys(this.props.data);
     var items = objectKeys.map(function (keyVal) {
       var singleItem = newData[keyVal];
       return (
-        <SingleItem key={singleItem.name} name={singleItem.name} mainStat={singleItem.group}>
+        <SingleItem key={keyVal} name={singleItem.name} mainStat={singleItem.group} handleClick={list.clickHandler} >
         </SingleItem>
       );
     });
     return (
-      <div id="allItems" onClick={this.clickHandler}>
+      <div id="allItems" >
         {items}
       </div>
     );
@@ -58,13 +59,24 @@ var ItemList = React.createClass({
 });
 
 var SingleItem = React.createClass({
+  clickHandler: function(item) {
+    this.props.handleClick(item);
+  },
   render: function() {
+    var singleItem = {name: this.props.name,
+                      mainstat: this.props.mainStat};
+    if (this.props.mainStat) {
+      var stat = <h4 key={this.props.name + 'stat'}>{this.props.mainStat}</h4>
+    } else {
+      var stat = <h4 key={this.props.name + 'stat'}></h4>
+    }
+
     return (
-      <div class="item">
-        <h3>{this.props.name}</h3>
-        {this.props.mainStat}
+      <div class="item" onClick={this.clickHandler.bind(null,singleItem)}>
+        <h3 key={this.props.name + 'name'}>{this.props.name}</h3>
+
       </div>
-    );
+    ); //removed         {stat}
   }
 });
 
