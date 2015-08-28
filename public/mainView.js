@@ -1,14 +1,28 @@
-var data = [
-  {name: 'Bloodthirster', mainStat: 'ad'},
-  {name: 'Deathcap', mainStat: 'ap'},
-  {name: 'Heart of gold', mainStat: 'supp'}
-];
-
 var MainView = React.createClass({
+  getInitialState: function() {
+    return {data: []};
+  },
+  getItemsFromServer: function() {
+    $.ajax({
+      url: this.props.url,
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  componentDidMount: function() {
+    this.getItemsFromServer();
+  },
   render: function() {
     return (
       <div id='mainView'>
-        <AllItems data={this.props.data}/>
+        <AllItems data={this.state.data}/>
+        <CurrentItemSet />
       </div>
     );
   }
@@ -18,8 +32,7 @@ var AllItems = React.createClass({
   render: function() {
     var items = this.props.data.map(function (singleItem) {
       return (
-        <SingleItem name={singleItem.name} 
-        mainStat={singleItem.mainStat}>
+        <SingleItem key={singleItem.name} name={singleItem.name} mainStat={singleItem.mainStat}>
         </SingleItem>
       );
     });
@@ -42,7 +55,17 @@ var SingleItem = React.createClass({
   }
 });
 
+var CurrentItemSet = React.createClass({
+  render: function() {
+    return (
+      <div id="itemSet">
+      <h4>Build an item set</h4>
+      </div>
+    );
+  }
+});
+
 React.render(
-  <MainView data={data}/>,
+  <MainView url='items.json'/>,
   document.getElementById('content')
 );
