@@ -1,4 +1,5 @@
-var bodyParser = require('body-parser');
+var bodyParser     = require('body-parser'),
+    itemController = require('./itemController.js');
 
 module.exports = function(app, express){
 
@@ -8,5 +9,7 @@ module.exports = function(app, express){
 
   //Serves the public directory to the user
   app.use(express.static(__dirname + '/../public'));
+
+  app.get('/items', itemController.getItems);
 
 };
